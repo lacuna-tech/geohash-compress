@@ -18,9 +18,6 @@ export class GeoHashCompress {
 	 * @returns {bool} true/false - true if point is inside the polygon or vice versa.
      */
 	contains(long, lat) {
-		if (isNaN(lat) || isNaN(long)) {
-			throw Error('Latitude and Longitude should be Numbers!');
-		}
 		const hash = Geohash.encode(lat, long, this.maxPrecision);
 		for (let i = 1; i <= hash.length; i++) {
 			if (this.set.has(hash.slice(0, i))) {

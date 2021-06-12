@@ -7,7 +7,10 @@ const main = async () => {
   console.time('init')
   const lngLats = laWithHoles.features[0].geometry.coordinates
   const polygon = await geoHashCompressFromPoly(lngLats, 7)
-  writeVariableToJsFile('hashToPoly', hashesToGeoJson([...polygon.set]))
+  const compressedHashArr = [...polygon.set]
+
+  writeFile('./output/compressedHashes.json', JSON.stringify(compressedHashArr))
+  writeVariableToJsFile('hashToPoly', hashesToGeoJson(compressedHashArr))
   console.timeEnd('init')
 
   const maxIterations = 400000
