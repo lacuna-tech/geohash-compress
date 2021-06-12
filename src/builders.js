@@ -63,15 +63,17 @@ const decreasePrecison = (data, currentPrecison) => {
     const subHash = hash.substr(0, hash.length - 1);
     const combinations = base32.map((c) => `${subHash}${c}`);
 
-    for (const combination of combinations) {
-      if (!(combination in data[currentPrecison])) return;
-    }
-    for (const combination of combinations) {
-      delete data[currentPrecison][combination];
-    }
-    if (!(currentPrecison - 1 in data)) {
-      data[currentPrecison - 1] = {};
-    }
-    data[currentPrecison - 1][hash.substr(0, hash.length - 1)] = 1;
+    (() => {
+      for (const combination of combinations) {
+        if (!(combination in data[currentPrecison])) return;
+      }
+      for (const combination of combinations) {
+        delete data[currentPrecison][combination];
+      }
+      if (!(currentPrecison - 1 in data)) {
+        data[currentPrecison - 1] = {};
+      }
+      data[currentPrecison - 1][hash.substr(0, hash.length - 1)] = 1;
+    })();
   }
 }
