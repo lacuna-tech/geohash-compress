@@ -1,6 +1,5 @@
 import { Geohash } from './Geohash.js'
-import nodeGeohash from 'ngeohash'
-import turf from '@turf/turf'
+
 export class GeoHashCompress {
 	/**
      * @param   {Set} compressedHashes - compressed hash set of the polygon
@@ -29,23 +28,5 @@ export class GeoHashCompress {
 			}
 		}
 		return false;
-	}
-	/**
-	 * @returns {bool} true/false - true if point is inside the polygon or vice versa.
-     */
-	toGeoJson() {
-		const hashes = [...this._set];
-		const hashes_bbox = [];
-		hashes.forEach((hash) => {
-			const [minLat,minLong,maxLat,maxLong] = nodeGeohash.decode_bbox(hash)
-			hashes_bbox.push([
-				[minLong,minLat],
-				[maxLong,minLat,],
-				[maxLong,maxLat,],
-				[minLong,maxLat],
-				[minLong,minLat]
-			])
-		})
-		return turf.getGeom(turf.polygon(hashes_bbox))
 	}
 }
