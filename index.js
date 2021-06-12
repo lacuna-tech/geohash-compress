@@ -1,2 +1,2 @@
-const geoHashCompress = require('./src/geoHashCompress');
-module.exports = geoHashCompress
+export * from './src/GeoHashCompress.js'
+export * from './src/builders.js'
