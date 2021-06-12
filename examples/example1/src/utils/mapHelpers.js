@@ -24,7 +24,6 @@ export const hashesToGeoJson = (hashes) => {
 			[minLong, minLat]
 		])
 	})
-  console.log('spans are like', {minDeltaLat, maxDeltaLat})
 	return {
     type: 'geojson',
     data: {
