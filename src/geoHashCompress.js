@@ -9,7 +9,7 @@ export class GeoHashCompress {
 	constructor(compressedHashes, maxPrecision = 7, minPrecision = 1) {
 		this.maxPrecision = maxPrecision;
 		this.minPrecision = minPrecision;
-		this.set = compressedHashes;
+		this.set = new Set(compressedHashes);
 	}
 
 	/**

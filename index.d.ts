@@ -1,9 +1,10 @@
 export module '@lacuna/geohash-compress' {
 
+  // array of array of array of numbers,... lng, lat
   declare type CoordinatesArray = Array<Array<Array<number>>>
 
   declare class GeoHashCompress {
-    constructor(compressedHashes: Set<string>, maxPrecision: number, minPrecision: number);
+    constructor(compressedHashes: string[], maxPrecision: number = 7, minPrecision: number = 1);
     contains(long: number, lat: number): boolean;
     set: Set<string>;
     toGeoJson(): any;

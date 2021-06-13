@@ -1,9 +1,9 @@
-import { GeoHashCompress } from './GeoHashCompress.js'
-import geohashPoly from 'geohash-poly'
+import { GeoHashCompress } from './GeoHashCompress.js';
+import geohashPoly from 'geohash-poly';
 
 export const geoHashCompressFromPoly = async (polygon, precision = 7, minPrecision = 1) => {
-  const compressedHashSet = new Set(await buildCompressedHashSet(polygon, precision = 7, minPrecision = 1))
-  return new GeoHashCompress(compressedHashSet, precision, minPrecision);
+  const compressedHash = await buildCompressedHashSet(polygon, precision, minPrecision);
+  return new GeoHashCompress(compressedHash, precision, minPrecision);
 }
 
 export const buildCompressedHashSet = async (polygon, precision = 7, minPrecision = 1) => {
@@ -25,12 +25,13 @@ const getUncompressedHashFromCoords = (coords, precision) => new Promise((resolv
 const compress = (uncompressedHash, precision, minPrecision) => {
   const result = [];
   if (!Array.isArray(uncompressedHash)) {
-    throw new Error('Hashes must be an Arrray');
+    throw new Error('Hashes must be an Array');
   }
   if (precision <= minPrecision) {
     throw new Error('minimum precision should be less than given precison of hashes!');
   }
 
+  // TODO replace const data = { [precision]: new Set(uncompressedHash)}
   const data = { [precision]: {} };
   data[precision] = uncompressedHash.reduce((acc, elem) => {
     acc[elem] = true;
