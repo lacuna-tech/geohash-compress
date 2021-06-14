@@ -1,14 +1,20 @@
-import {geoHashCompressFromPoly} from '@lacuna/geohash-compress'
+import {geoHashCompressFromPoly, GeoHashCompress} from '@lacuna/geohash-compress'
 import { laFeature, laWithHoles } from '../la.js'
 import { writeFile, writeVariableToJsFile } from './utils/writeFile.js'
-import { makeRandomPointCenteredOn, hashesToGeoJson } from './utils/mapHelpers.js'
+import { makeRandomPointCenteredOn, hashesToGeoJson, writeFeatureCollectionForPoints, writePolyFeatureForPoints } from './utils/mapHelpers.js'
 
 const main = async () => {
   console.time('init')
   const lngLats = laWithHoles.features[0].geometry.coordinates
-  const polygon = await geoHashCompressFromPoly(lngLats, 7)
-  const compressedHashArr = [...polygon.set]
 
+  writePolyFeatureForPoints('polygonMask', lngLats)
+  const polygon = await geoHashCompressFromPoly(lngLats, 8)
+
+  // const dataStr = fs.readFileSync('./output/compressedHashes.json', 'utf8')
+  // const dataArr = JSON.parse(dataStr)
+  // const polygon = new GeoHashCompress(dataArr, 7)
+
+  const compressedHashArr = [...polygon.set]
   writeFile('./output/compressedHashes.json', JSON.stringify(compressedHashArr))
   writeVariableToJsFile('hashToPoly', hashesToGeoJson(compressedHashArr))
   console.timeEnd('init')
@@ -28,23 +34,6 @@ const main = async () => {
 
   writeFeatureCollectionForPoints('inside', a.filter( a => a.inside).map(a => a.coordinates))
   writeFeatureCollectionForPoints('outside', a.filter( a => !a.inside).map(a => a.coordinates))
-}
-
-const writeFeatureCollectionForPoints = (varName, lngLats) => {
-  writeVariableToJsFile(varName, {
-    type: 'geojson',
-    data: {
-      type: "FeatureCollection",
-      features: lngLats.map((lngLat) => ({
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": lngLat
-        }
-      }))
-    }
-  })
 }
 
 main()

@@ -1,5 +1,6 @@
 import ngeohash from 'ngeohash'
 import turf from '@turf/turf'
+import { writeVariableToJsFile } from './writeFile.js'
 
 export const makeRandomPointCenteredOn = (lng, lat, delta) => {
   return {
@@ -31,4 +32,34 @@ export const hashesToGeoJson = (hashes) => {
       "geometry": turf.getGeom(turf.polygon(hashes_bbox))
     }
   }
+}
+
+export const writeFeatureCollectionForPoints = (varName, lngLats) => {
+  writeVariableToJsFile(varName, {
+    type: 'geojson',
+    data: {
+      type: "FeatureCollection",
+      features: lngLats.map((lngLat) => ({
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "type": "Point",
+          "coordinates": lngLat
+        }
+      }))
+    }
+  })
+}
+
+export const writePolyFeatureForPoints = (varName, lngLats) => {
+  writeVariableToJsFile(varName, {
+    type: 'geojson',
+    data: {
+      type: 'Feature',
+      geometry: {
+        type: 'Polygon',
+        coordinates: lngLats
+      }
+    }
+  })
 }
