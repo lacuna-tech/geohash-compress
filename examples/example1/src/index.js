@@ -2,6 +2,8 @@ import {geoHashCompressFromPoly, GeoHashCompress} from '@lacuna/geohash-compress
 import { laFeature, laWithHoles } from '../la.js'
 import { writeFile, writeVariableToJsFile } from './utils/writeFile.js'
 import { makeRandomPointCenteredOn, hashesToGeoJson, writeFeatureCollectionForPoints, writePolyFeatureForPoints } from './utils/mapHelpers.js'
+import { pointInShape } from '@mds-core/mds-utils'
+import fs from 'fs'
 
 const main = async () => {
   console.time('init')
@@ -36,4 +38,40 @@ const main = async () => {
   writeFeatureCollectionForPoints('outside', a.filter( a => !a.inside).map(a => a.coordinates))
 }
 
-main()
+// main()
+
+const accuracy = async () => {
+  const lngLats = laWithHoles.features[0].geometry.coordinates
+
+  const la8 = './output/GeohashCompress-LA-8.json' // results { pCorrect: 0.998984, pIncorrect: 0.998984, numMoreComp: 1016 }
+  const la7 = './output/GeohashCompress-LA-7.json' // 
+  const hashCompress = new GeoHashCompress(JSON.parse(fs.readFileSync(la8, 'utf8')), 8, 1)
+
+  const maxIterations = 1000000
+  let numberIncorrect = 0;
+  console.time('time')
+  for (let i = 0; i < maxIterations; i++) {
+    const { lng, lat } = makeRandomPointCenteredOn(-118.3941650390625, 34.093610452768715, 0.5)
+    const hashIn = hashCompress.contains(lng,lat);
+    const polyIn = pointInShape({lat, lng}, {
+      type: 'Polygon',
+      coordinates: lngLats
+    })
+    if (hashIn != polyIn) {
+      numberIncorrect++
+    }
+
+    if (i % 100000 == 0) {
+      console.log('progress: ', (i / maxIterations) * 100)
+    }
+  }
+  console.timeEnd('time')
+
+  console.log(`results`, {
+    pCorrect: (maxIterations - numberIncorrect)/maxIterations, 
+    pIncorrect: (maxIterations - numberIncorrect)/maxIterations,
+    numMoreComp: (numberIncorrect)/maxIterations * maxIterations
+  })
+}
+
+accuracy()

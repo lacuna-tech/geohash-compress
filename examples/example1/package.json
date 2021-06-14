@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@lacuna/geohash-compress": "file:../../.",
+    "@mds-core/mds-utils": "^0.1.29-lacuna-tech.43",
     "@turf/turf": "^5.1.6",
     "geohash-poly": "^0.6.0",
     "ngeohash": "^0.6.3"
