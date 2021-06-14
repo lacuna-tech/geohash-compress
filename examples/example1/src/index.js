@@ -38,40 +38,47 @@ const main = async () => {
   writeFeatureCollectionForPoints('outside', a.filter( a => !a.inside).map(a => a.coordinates))
 }
 
-// main()
+main()
 
 const accuracy = async () => {
   const lngLats = laWithHoles.features[0].geometry.coordinates
 
-  const la8 = './output/GeohashCompress-LA-8.json' // results { pCorrect: 0.998984, pIncorrect: 0.998984, numMoreComp: 1016 }
+  const la8 = './output/GeohashCompress-LA-8.json' 
   const la7 = './output/GeohashCompress-LA-7.json' // 
-  const hashCompress = new GeoHashCompress(JSON.parse(fs.readFileSync(la8, 'utf8')), 8, 1)
+
+  const results = {}
 
   const maxIterations = 1000000
-  let numberIncorrect = 0;
-  console.time('time')
-  for (let i = 0; i < maxIterations; i++) {
-    const { lng, lat } = makeRandomPointCenteredOn(-118.3941650390625, 34.093610452768715, 0.5)
-    const hashIn = hashCompress.contains(lng,lat);
-    const polyIn = pointInShape({lat, lng}, {
-      type: 'Polygon',
-      coordinates: lngLats
-    })
-    if (hashIn != polyIn) {
-      numberIncorrect++
+  Object.entries({la7, la8}).forEach(([compressName, laResFile]) => {
+    console.log('starting ', compressName)
+    const hashCompress = new GeoHashCompress(JSON.parse(fs.readFileSync(laResFile, 'utf8')), 8, 1)
+    let numberIncorrect = 0
+    
+    const timingLabel = `timing ${compressName}`
+    console.time(timingLabel)
+    for (let i = 0; i < maxIterations; i++) {
+      const { lng, lat } = makeRandomPointCenteredOn(-118.3941650390625, 34.093610452768715, 0.5)
+      const hashIn = hashCompress.contains(lng,lat);
+      const polyIn = pointInShape({lat, lng}, {
+        type: 'Polygon',
+        coordinates: lngLats
+      })
+      if (hashIn != polyIn) {
+        numberIncorrect++
+      }
+  
+      if (i % 100000 == 0) {
+        console.log('progress: ', (i / maxIterations) * 100)
+      }
     }
-
-    if (i % 100000 == 0) {
-      console.log('progress: ', (i / maxIterations) * 100)
+    results[compressName] = {
+      pCorrect: (maxIterations - numberIncorrect)/maxIterations, 
+      pIncorrect: (numberIncorrect)/maxIterations,
+      numMoreComp: (numberIncorrect)/maxIterations * maxIterations
     }
-  }
-  console.timeEnd('time')
-
-  console.log(`results`, {
-    pCorrect: (maxIterations - numberIncorrect)/maxIterations, 
-    pIncorrect: (maxIterations - numberIncorrect)/maxIterations,
-    numMoreComp: (numberIncorrect)/maxIterations * maxIterations
   })
+
+  console.log("results", results)
 }
 
-accuracy()
+// accuracy()
