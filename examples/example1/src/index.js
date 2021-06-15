@@ -10,18 +10,18 @@ const main = async () => {
   const lngLats = laWithHoles.features[0].geometry.coordinates
 
   writePolyFeatureForPoints('polygonMask', lngLats)
-  const polygon = await geoHashCompressFromPoly(lngLats, 8)
+  const polygon = await geoHashCompressFromPoly(lngLats, 7)
 
-  // const dataStr = fs.readFileSync('./output/compressedHashes.json', 'utf8')
+  // const dataStr = fs.readFileSync('./output/GeohashCompress-LA-8.json', 'utf8')
   // const dataArr = JSON.parse(dataStr)
-  // const polygon = new GeoHashCompress(dataArr, 7)
+  // const polygon = new GeoHashCompress(dataArr)
 
   const compressedHashArr = [...polygon.set]
   writeFile('./output/compressedHashes.json', JSON.stringify(compressedHashArr))
   writeVariableToJsFile('hashToPoly', hashesToGeoJson(compressedHashArr))
   console.timeEnd('init')
 
-  const maxIterations = 400000
+  const maxIterations = 1000000
   const timingTag = `compute ${maxIterations} pts`
   console.time(timingTag)
   const a = []
@@ -71,6 +71,7 @@ const accuracy = async () => {
         console.log('progress: ', (i / maxIterations) * 100)
       }
     }
+    console.timeEnd(timingLabel)
     results[compressName] = {
       pCorrect: (maxIterations - numberIncorrect)/maxIterations, 
       pIncorrect: (numberIncorrect)/maxIterations,

@@ -6,9 +6,14 @@ export class GeoHashCompress {
      * @param   {number} maxPrecision - Maximum precision of hashes generated.
      * @param   {number} minPrecision - Minimum precision of hash generated.
      */
-	constructor(compressedHashes, maxPrecision = 7, minPrecision = 1) {
-		this.maxPrecision = maxPrecision;
-		this.minPrecision = minPrecision;
+	constructor(compressedHashes) {
+		this.maxPrecision = Number.NEGATIVE_INFINITY;
+		this.minPrecision = Number.POSITIVE_INFINITY;
+    
+    for (const hash of compressedHashes) {
+      this.maxPrecision = Math.max(this.maxPrecision, hash.length)
+      this.minPrecision = Math.min(this.minPrecision, hash.length)
+    }
 		this.set = new Set(compressedHashes);
 	}
 
@@ -19,7 +24,7 @@ export class GeoHashCompress {
      */
 	contains(long, lat) {
 		const hash = Geohash.encode(lat, long, this.maxPrecision);
-		for (let i = 1; i <= hash.length; i++) {
+		for (let i = 1; i <= this.minPrecision; i++) {
 			if (this.set.has(hash.slice(0, i))) {
 				return true;
 			}
