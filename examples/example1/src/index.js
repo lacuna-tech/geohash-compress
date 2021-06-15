@@ -10,11 +10,11 @@ const main = async () => {
   const lngLats = laWithHoles.features[0].geometry.coordinates
 
   writePolyFeatureForPoints('polygonMask', lngLats)
-  const polygon = await geoHashCompressFromPoly(lngLats, 7)
+  // const polygon = await geoHashCompressFromPoly(lngLats, 7)
 
-  // const dataStr = fs.readFileSync('./output/GeohashCompress-LA-8.json', 'utf8')
-  // const dataArr = JSON.parse(dataStr)
-  // const polygon = new GeoHashCompress(dataArr)
+  const dataStr = fs.readFileSync('./output/GeohashCompress-LA-8.json', 'utf8')
+  const dataArr = JSON.parse(dataStr)
+  const polygon = new GeoHashCompress(dataArr)
 
   const compressedHashArr = [...polygon.set]
   writeFile('./output/compressedHashes.json', JSON.stringify(compressedHashArr))

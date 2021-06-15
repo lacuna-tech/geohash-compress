@@ -1,5 +1,4 @@
-import { Geohash } from './Geohash.js'
-
+import Geohash from '@geonet/geohash'
 export class GeoHashCompress {
 	/**
      * @param   {Set} compressedHashes - compressed hash set of the polygon
@@ -24,11 +23,14 @@ export class GeoHashCompress {
      */
 	contains(long, lat) {
 		const hash = Geohash.encode(lat, long, this.maxPrecision);
-		for (let i = 1; i <= this.minPrecision; i++) {
+		return this.containsHash(hash);
+	}
+  containsHash(hash) {
+    for (let i = 1; i <= this.minPrecision; i++) {
 			if (this.set.has(hash.slice(0, i))) {
 				return true;
 			}
 		}
 		return false;
-	}
+  }
 }

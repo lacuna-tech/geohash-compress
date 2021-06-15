@@ -1,12 +1,14 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@geonet/geohash': ^1.0.16
   chai: ^4.0.0
   eslint: ^7.6.0
   geohash-poly: ^0.6.0
   mocha: ^6.0.0
 
 dependencies:
+  '@geonet/geohash': 1.0.16
   geohash-poly: 0.6.0
 
 devDependencies:
@@ -52,6 +54,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@geonet/geohash/1.0.16:
+    resolution: {integrity: sha512-qgnEz6GC3RmlT+TAF0GsuTBhKyw+8JrsZoQ41gy20K0r7Ubm/jbzXkfMyEDVNAjQxxQV4+FC+zFqVK9Dzjlw9w==}
+    dev: false
 
   /acorn-jsx/5.3.1_acorn@7.4.1:
     resolution: {integrity: sha512-K0Ptm/47OKfQRpNQ2J/oIN/3QYiK6FwW+eJbILhsdxh2WTLdl+30o8aGdTbm5JbffpFFAg/g+zi1E+jvJha5ng==}

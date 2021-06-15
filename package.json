@@ -5,8 +5,7 @@
   "main": "index.js",
   "typings": "index.d.ts",
   "type": "module",
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [
     "geohash",
     "geocode",
@@ -29,12 +28,13 @@
   },
   "homepage": "https://github.com/lacuna-tech/geohash-compress#readme",
   "dependencies": {
+    "@geonet/geohash": "^1.0.16",
     "geohash-poly": "^0.6.0"
   },
   "devDependencies": {
-    "mocha": "^6.0.0",
     "chai": "^4.0.0",
-    "eslint": "^7.6.0"
+    "eslint": "^7.6.0",
+    "mocha": "^6.0.0"
   },
   "eslintConfig": {
     "env": {
