@@ -6,6 +6,7 @@ export module '@lacuna/geohash-compress' {
   declare class GeoHashCompress {
     constructor(compressedHashes: string[], maxPrecision: number = 7, minPrecision: number = 1);
     contains(long: number, lat: number): boolean;
+    containsHash(hash: string): boolean;
     set: Set<string>;
     toGeoJson(): any;
   }
