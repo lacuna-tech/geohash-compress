@@ -22,11 +22,10 @@ export class GeoHashCompress {
 	 * @returns {bool} true/false - true if point is inside the polygon or vice versa.
      */
 	contains(long, lat) {
-		const hash = Geohash.encode(lat, long, this.maxPrecision);
-		return this.containsHash(hash);
+		return this.containsHash(Geohash.encode(long, lat, this.maxPrecision));
 	}
   containsHash(hash) {
-    for (let i = 1; i <= this.minPrecision; i++) {
+    for (let i = this.minPrecision; i <= this.maxPrecision; i++) {
 			if (this.set.has(hash.slice(0, i))) {
 				return true;
 			}

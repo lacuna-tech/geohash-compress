@@ -1,5 +1,8 @@
 import { GeoHashCompress } from './GeoHashCompress.js';
 import geohashPoly from 'geohash-poly';
+import Geohash from '@geonet/geohash';
+
+export const encode = (lng, lat, hashLength) => Geohash.encode(lng, lat, hashLength)
 
 export const geoHashCompressFromPoly = async (polygon, precision = 7, minPrecision = 1) => {
   const compressedHash = await buildCompressedHashSet(polygon, precision, minPrecision);
