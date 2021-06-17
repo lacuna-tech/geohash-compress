@@ -12,4 +12,5 @@ export module '@lacuna/geohash-compress' {
 
   declare const geoHashCompressFromPoly = async (polygon: CoordinatesArray, precision: number, minPrecision: number) => GeoHashCompress
   declare const buildCompressedHashSet = async (polygon: CoordinatesArray, precision: number, minPrecision: number) => GeoHashCompress
+  declare const encode = (lng: number, lat: number, hashLength: number) => string
 }

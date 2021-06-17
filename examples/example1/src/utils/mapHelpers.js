@@ -26,11 +26,8 @@ export const hashesToGeoJson = (hashes) => {
 		])
 	})
 	return {
-    type: 'geojson',
-    data: {
-      "type": "Feature",
-      "geometry": turf.getGeom(turf.polygon(hashes_bbox))
-    }
+    "type": "Feature",
+    "geometry": turf.getGeom(turf.polygon(hashes_bbox))
   }
 }
 

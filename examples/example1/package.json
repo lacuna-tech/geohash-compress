@@ -11,10 +11,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@geonet/geohash": "^1.0.16",
     "@lacuna/geohash-compress": "file:../../.",
     "@mds-core/mds-utils": "^0.1.29-lacuna-tech.43",
     "@turf/turf": "^5.1.6",
     "geohash-poly": "^0.6.0",
-    "ngeohash": "^0.6.3"
+    "latlon-geohash": "^2.0.0",
+    "ngeohash": "^0.6.3",
+    "triangle-geohash": "^0.0.3"
   }
 }

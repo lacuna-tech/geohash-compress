@@ -14,5 +14,25 @@
         "start"
       ]
     },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "triTest Debug",
+      "runtimeExecutable": "node",
+      "cwd": "${workspaceFolder}",
+      "runtimeArgs": [
+        "--expose-gc", "src/triTest.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "triTest2 Debug",
+      "runtimeExecutable": "node",
+      "cwd": "${workspaceFolder}",
+      "runtimeArgs": [
+        "--expose-gc", "src/triTest2.js"
+      ]
+    }
   ]
 }
