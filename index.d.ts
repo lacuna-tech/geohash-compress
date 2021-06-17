@@ -8,6 +8,8 @@ export module '@lacuna/geohash-compress' {
     contains(long: number, lat: number): boolean;
     containsHash(hash: string): boolean;
     set: Set<string>;
+    maxPrecision: number;
+    minPrecision: number;
     toGeoJson(): any;
   }
 

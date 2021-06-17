@@ -9,13 +9,16 @@
     <style>
       body { margin: 0; padding: 0; }
       #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+      #overlay { position: absolute; z-index: 100; }
     </style>
 
     <script src="../output/ladotPolygonMask.js"></script>
   </head>
   <body>
-    <div id="map"></div>
+    <pre id="map"></pre>
+    <div id="overlay"></div>
     <script>
+        const overlayDiv = document.getElementById('overlay')
         console.log('ladotPolygonMask is loaded?', ladotPolygonMask)
         mapboxgl.accessToken = 'pk.eyJ1IjoibGFjdW5hLW1hcGJveCIsImEiOiJjanBva3A0cjEwZXdkNDJydW91Ym82aGpyIn0.Qh-ak-vPBz7EL3ngRdNRZQ';
         var map = new mapboxgl.Map({
@@ -91,6 +94,8 @@
               const {id, properties: {uuid, name}} = e.features[0]
               hoveredStateId = id;
               console.log('selected: ', {uuid, name})
+
+              overlayDiv.innerHTML = JSON.stringify({uuid,name}, null, 4)
               
               map.setFeatureState(
                   { source: 'my-source', id: hoveredStateId },
