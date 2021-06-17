@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>la hash polygon feature of LA with holes</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.js"></script>
+    <style>
+      body { margin: 0; padding: 0; }
+      #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+
+    <script src="../output/ladotPolygonMask.js"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+        console.log('ladotPolygonMask is loaded?', ladotPolygonMask)
+        mapboxgl.accessToken = 'pk.eyJ1IjoibGFjdW5hLW1hcGJveCIsImEiOiJjanBva3A0cjEwZXdkNDJydW91Ym82aGpyIn0.Qh-ak-vPBz7EL3ngRdNRZQ';
+        var map = new mapboxgl.Map({
+          container: 'map', // container ID
+          style: 'mapbox://styles/mapbox/light-v10', // style URL
+          center: [-118.3941650390625, 34.093610452768715], // starting position
+          zoom: 9 // starting zoom
+        });
+        let hoveredStateId = null;
+      
+        map.on('load', function () {
+          // Add a data source containing GeoJSON data.
+          map.addSource('my-source', ladotPolygonMask);
+          
+          // Add a new layer to visualize the polygon.
+          // map.addLayer({
+          //   'id': 'my-source',
+          //   'type': 'fill',
+          //   'source': 'my-source', // reference the data source
+          //   'layout': {},
+          //   'paint': {
+          //     'fill-color': '#000000', // blue color fill
+          //     'fill-opacity': 0.25
+          //   }
+          // });
+         
+          // Add a black outline around the polygon.
+          map.addLayer({
+            'id': 'outline',
+            'type': 'line',
+            'source': 'my-source',
+            'layout': {},
+            'paint': {
+              'line-color': [
+                'case', ['boolean', ['feature-state', 'hover'], false],
+                '#0f0',
+                ['get', 'fill-color']
+              ],
+              'line-width': 5
+            }
+          });
+
+          map.addLayer({
+            'id': 'geographies-fills',
+            'type': 'fill',
+            'source': 'my-source',
+            'layout': {},
+            'paint': {
+              'fill-color': [
+                'case',
+                  ['boolean', ['feature-state', 'hover'], false],
+                  '#0f0',
+                  ['get', 'fill-color']
+                ], 
+              'fill-opacity': [
+                'case',
+                  ['boolean', ['feature-state', 'hover'], false],
+                  1,
+                  0.5
+                ]
+              }
+            });
+
+          const hoverName = 'outline'
+          map.on('mousemove', hoverName, function (e) {
+            if (e.features.length > 0) {
+              if (hoveredStateId !== null) {
+                map.setFeatureState(
+                  { source: 'my-source', id: hoveredStateId },
+                  { hover: false }
+                );
+              }
+              const {id, properties: {uuid, name}} = e.features[0]
+              hoveredStateId = id;
+              console.log('selected: ', {uuid, name})
+              
+              map.setFeatureState(
+                  { source: 'my-source', id: hoveredStateId },
+                  { hover: true }
+                );
+              }
+            });
+            
+            // When the mouse leaves the state-fill layer, update the feature state of the
+            // previously hovered feature.
+            map.on('mouseleave', hoverName, function () {
+            if (hoveredStateId !== null) {
+              map.setFeatureState(
+                { source: 'my-source', id: hoveredStateId },
+                { hover: false }
+              );
+            }
+            hoveredStateId = null;
+            });
+        });
+    </script>
+  
+  </body>
+</html>

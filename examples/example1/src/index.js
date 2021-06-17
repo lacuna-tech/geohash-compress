@@ -18,7 +18,10 @@ const main = async () => {
 
   const compressedHashArr = [...polygon.set]
   writeFile('./output/compressedHashes.json', JSON.stringify(compressedHashArr))
-  writeVariableToJsFile('hashToPoly', hashesToGeoJson(compressedHashArr))
+  writeVariableToJsFile('hashToPoly',  {
+    type: 'geojson',
+    data: hashesToGeoJson(compressedHashArr)
+  })
   console.timeEnd('init')
 
   const maxIterations = 1000000
